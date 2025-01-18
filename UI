@@ -1,46 +1,77 @@
-
 class UI:
-    import tkinter as t
-    import requests
-    from PIL import Image, ImageTk
-    from io import BytesIO
     
-    first_text_box = """Hey there! This is a game designed to showcase the martingale strategy for playing the classic casino game of roulette.
-    
-    There are a few paths below to explore manipulations to the strategy:"""
-    
-    
-    #Window Title
-    UI_root = t.Tk()
-    UI_root.title("Martingale Game")
-    
-    #Setting Window Dimensions
-    screen_w = UI_root.winfo_screenwidth()
-    screen_h = UI_root.winfo_screenheight()
-    UI_root.geometry(f"{screen_w}x{screen_h}")
-    
-    #Main Title
-    subtitle = t.Label(UI_root, text = "Martingale Game", font =("Times New Roman", 18))
-    subtitle.pack(padx = 20, pady = 20)
-    
-    #Textbox
-    text_box = t.Text(UI_root, height = 10, width = 60, font = ("Times New Roman", 18))
-    text_box.insert(t.END, first_text_box)
-    text_box.pack(padx = 20, pady = 20)
-    
-    #Roulette Wheel Image
-    rsp = requests.get("https://media.assettype.com/bettorsinsider%2F2024-01%2F0df27bfd-76bd-415f-800e-0261840c9499%2Ffree_walking_tour_salzburg_WLNdV3xC_fI_unsplash__1_.jpg?w=480&auto=format%2Ccompress&fit=max")
-    image = Image.open(BytesIO(rsp.content))
-    t_image = ImageTk.PhotoImage(image)
-    label = t.Label(UI_root, image=t_image)
-    label.pack(padx = 20, pady = 20)
-    
-    import pyautogui
-    import time
-    while True:
-        UI_root.mainloop() and print(pyautogui.position())
+    total_number_of_windows = []
+    @staticmethod
+    def starting_page():
+        
+        #Necessary Packages
+        import tkinter as t
+        import requests
+        from PIL import Image, ImageTk
+        from io import BytesIO
+        
+        #Close Any Previous Window First
+        for k in total_number_of_windows:
+            k.destroy()
+            total_number_of_windows.remove(k)
+        
+        #Window Title
+        UI_root = t.Tk()
+        UI_root.title("Martingale Game")
+        
+        #Add window to list of windows
+        global total_number_of_windows
+        total_number_of_windows.append(UI_root)
+        
+        
+        #Setting Window Dimensions
+        screen_w = UI_root.winfo_screenwidth()
+        screen_h = UI_root.winfo_screenheight()
+        UI_root.geometry(f"{screen_w}x{screen_h}")
+        
+        #Main Title
+        subtitle = t.Label(UI_root, text = "Martingale Game", font =("Times New Roman", 18))
+        subtitle.pack(padx = 20, pady = 20)
+        
+        #Textbox
+        first_text_box = """Hey there! This is a game designed to showcase the martingale strategy for playing the classic casino game of roulette.
+        
+        There are a few options to view how the strategy works. Click the next button to proceed!"""
+        
+        text_box = t.Text(UI_root, height = 5, width = 52, font = ("Times New Roman", 18))
+        text_box.insert(t.END, first_text_box)
+        text_box.pack(padx = 20, pady = 20)
+        
+        #Roulette Wheel Image
+        rsp = requests.get("https://media.assettype.com/bettorsinsider%2F2024-01%2F0df27bfd-76bd-415f-800e-0261840c9499%2Ffree_walking_tour_salzburg_WLNdV3xC_fI_unsplash__1_.jpg?w=480&auto=format%2Ccompress&fit=max")
+        image = Image.open(BytesIO(rsp.content))
+        t_image = ImageTk.PhotoImage(image)
+        label = t.Label(UI_root, image=t_image)
+        label.pack(padx = 20, pady = 20)
+        
+        #Next Arrow
+        next_but = t.Button(UI_root,  text = "Next", padx=100, pady=100, bg="cyan")
+        next_but.pack(padx=100, pady = 100)
+        
+        #Run UI
+        UI_root.mainloop()
         
     
     
-
+    
+    
+    
+    
+    
+        
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
