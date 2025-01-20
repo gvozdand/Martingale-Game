@@ -1,27 +1,30 @@
+import tkinter as t
+import requests
+from PIL import Image, ImageTk
+from io import BytesIO
+from IPython.display import display, Math
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
+
 class UI:
     
-    total_number_of_windows = []
+    
+    def latex_coder(expression: str, root):
+        LTX_code = expression
+        LTX_fig = plt.Figure(figsize=(4,1.5))
+        LTX_ax = LTX_fig.add_subplot(111)
+        LTX_ax.text(0.5,0.5, LTX_code, fontsize=20, ha="center", va="center")
+        LTX_ax.axis("off")
+        LTX_canvas = FigureCanvasTkAgg(LTX_fig, master = root)
+        LTX_canvas.get_tk_widget().pack()
+        LTX_canvas.draw()
+    
     @staticmethod
     def starting_page():
-        
-        #Necessary Packages
-        import tkinter as t
-        import requests
-        from PIL import Image, ImageTk
-        from io import BytesIO
-        
-        #Close Any Previous Window First
-        for k in total_number_of_windows:
-            k.destroy()
-            total_number_of_windows.remove(k)
         
         #Window Title
         UI_root = t.Tk()
         UI_root.title("Martingale Game")
-        
-        #Add window to list of windows
-        global total_number_of_windows
-        total_number_of_windows.append(UI_root)
         
         
         #Setting Window Dimensions
@@ -38,7 +41,7 @@ class UI:
         
         There are a few options to view how the strategy works. Click the next button to proceed!"""
         
-        text_box = t.Text(UI_root, height = 5, width = 52, font = ("Times New Roman", 18))
+        text_box = t.Text(UI_root, height = 5, width = 62, font = ("Times New Roman", 18))
         text_box.insert(t.END, first_text_box)
         text_box.pack(padx = 20, pady = 20)
         
@@ -56,22 +59,37 @@ class UI:
         #Run UI
         UI_root.mainloop()
         
-    
-    
-    
-    
-    
-    
-    
+    @staticmethod
+    def martingale_description():
+        #Window Title
+        desc_root = t.Tk()
+        desc_root.title("Martingale Game")
         
+        #Setting Window Dimensions
+        screen_w = desc_root.winfo_screenwidth()
+        screen_h = desc_root.winfo_screenheight()
+        desc_root.geometry(f"{screen_w}x{screen_h}")
         
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        #Main Title
+        subtitle_two = t.Label(desc_root, text = "How does the Martingale System work?", font =("Times New Roman", 18))
+        subtitle_two.pack(padx = 20, pady = 20)
+        
+        #Textbox
+        second_text_box = """The Martingale Strategy is simple. Bet some amount on a game of roulette, either on red of black. 
+        
+If you win, continue betting on the same color. If you lose, double the bet size and bet again on the same color. The degree of "consistency" exists due to the roughly binomial distribution this follows. Of course, American roulette involves a green color that shifts the odds of winning to roughly 47% when betting solely red or black. Although there will be losses, or even streaks of losing, the doubling of the bet recoups losses and adds profits. To combat this strategy, casinos employ a max bet size. In a sense, this strategy allows players to "guarentee" a win. However, players must have a substantial amount of funds and play reasonably far from the max bet size.
+
+The mathematical formalism for this process is below. E(W) are the expected winnings, where M represents the number of Martingale rounds, p denotes the probability of losing, and n is the numbers of coups (spins necessary to achieve first Martingale win).
+
+E(N) is the expected value of coups."""
+        
+        text_box_two = t.Text(desc_root, height = 12, width = 100, font = ("Times New Roman", 18))
+        text_box_two.insert(t.END, second_text_box)
+        text_box_two.pack(padx = 20, pady = 20)
+        
+        #LaTeX Code
+        UI.latex_coder("$E(W) = M(1-(2p)^n)$", desc_root)
+        UI.latex_coder("$E(N) = M*E(m)$", desc_root)
+        UI.latex_coder("$E(m) = \\frac{1}{1-p}$", desc_root)
+        
+        desc_root.mainloop()
