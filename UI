@@ -6,90 +6,112 @@ from IPython.display import display, Math
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 
-class UI():
-    def __init__(self):
+
+
+
+class main_window:
     
-        def latex_coder(expression: str, root):
-            LTX_code = expression
-            LTX_fig = plt.Figure(figsize=(4,1.5))
-            LTX_ax = LTX_fig.add_subplot(111)
-            LTX_ax.text(0.5,0.5, LTX_code, fontsize=20, ha="center", va="center")
-            LTX_ax.axis("off")
-            LTX_canvas = FigureCanvasTkAgg(LTX_fig, master = root)
-            LTX_canvas.get_tk_widget().pack()
-            LTX_canvas.draw()
+    def __init__(self, subtitle, textbox):
         
-        @staticmethod
-        def starting_page():
-            
-            #Window Title
-            UI_root = t.Tk()
-            UI_root.title("Martingale Game")
-            
-            
-            #Setting Window Dimensions
-            screen_w = UI_root.winfo_screenwidth()
-            screen_h = UI_root.winfo_screenheight()
-            UI_root.geometry(f"{screen_w}x{screen_h}")
-            
-            #Main Title
-            subtitle = t.Label(UI_root, text = "Martingale Game", font =("Times New Roman", 18))
-            subtitle.pack(padx = 20, pady = 20)
-            
-            #Textbox
-            first_text_box = """Hey there! This is a game designed to showcase the martingale strategy for playing the classic casino game of roulette.
-            
-            There are a few options to view how the strategy works. Click the next button to proceed!"""
-            
-            text_box = t.Text(UI_root, height = 5, width = 62, font = ("Times New Roman", 18))
-            text_box.insert(t.END, first_text_box)
-            text_box.pack(padx = 20, pady = 20)
-            
-            #Roulette Wheel Image
-            rsp = requests.get("https://media.assettype.com/bettorsinsider%2F2024-01%2F0df27bfd-76bd-415f-800e-0261840c9499%2Ffree_walking_tour_salzburg_WLNdV3xC_fI_unsplash__1_.jpg?w=480&auto=format%2Ccompress&fit=max")
-            image = Image.open(BytesIO(rsp.content))
-            t_image = ImageTk.PhotoImage(image)
-            label = t.Label(UI_root, image=t_image)
-            label.pack(padx = 20, pady = 20)
-            
-            #Next Arrow
-            next_but = t.Button(UI_root,  text = "Next", padx=100, pady=100, bg="cyan")
-            next_but.pack(padx=100, pady = 100)
-            
-            #Run UI
-            UI_root.mainloop()
-            
-        @staticmethod
-        def martingale_description():
-            #Window Title
-            desc_root = t.Tk()
-            desc_root.title("Martingale Game")
-            
-            #Setting Window Dimensions
-            screen_w = desc_root.winfo_screenwidth()
-            screen_h = desc_root.winfo_screenheight()
-            desc_root.geometry(f"{screen_w}x{screen_h}")
-            
-            #Main Title
-            subtitle_two = t.Label(desc_root, text = "How does the Martingale System work?", font =("Times New Roman", 18))
-            subtitle_two.pack(padx = 20, pady = 20)
-            
-            #Textbox
-            second_text_box = """The Martingale Strategy is simple. Bet some amount on a game of roulette, either on red of black. 
-            
-    If you win, continue betting on the same color. If you lose, double the bet size and bet again on the same color. The degree of "consistency" exists due to the roughly binomial distribution this follows. Of course, American roulette involves a green color that shifts the odds of winning to roughly 47% when betting solely red or black. Although there will be losses, or even streaks of losing, the doubling of the bet recoups losses and adds profits. To combat this strategy, casinos employ a max bet size. In a sense, this strategy allows players to "guarentee" a win. However, players must have a substantial amount of funds and play reasonably far from the max bet size.
+        self.subtitle = subtitle
+        self.textbox = textbox
+        
+        #Saving Widgets for Later
+        self.root = None
+        self.label = None
+        self.t_image = None
+        self.w_subtitle = None
+        self.w_textbox = None
+        
+    def window_creation(self):
+        
+        #Window Title
+        self.root = t.Tk()
+        self.root.title("Martingale Game")
+        self.root.configure(bg="red")
+        
+        #Setting Window Dimensions
+        screen_w = self.root.winfo_screenwidth()
+        screen_h = self.root.winfo_screenheight()
+        self.root.geometry(f"{screen_w}x{screen_h}")
+
+    def text_creation(self): 
+        #Main Title
+        self.w_subtitle = t.Label(self.root, text = self.subtitle, font =("Times New Roman", 18))
+        self.w_subtitle.pack(padx = 20, pady = 20)
+
+        #Textbox
+        self.w_texbox = t.Text(self.root, height = 5, width = 69, font = ("Times New Roman", 18))
+        self.w_texbox.insert(t.END, self.textbox)
+        self.w_texbox.pack(padx = 20, pady = 20)
+
+    def image_creation(self):
+        #Roulette Wheel Image
+        rsp = requests.get("https://media.assettype.com/bettorsinsider%2F2024-01%2F0df27bfd-76bd-415f-800e-0261840c9499%2Ffree_walking_tour_salzburg_WLNdV3xC_fI_unsplash__1_.jpg?w=480&auto=format%2Ccompress&fit=max")
+        image = Image.open(BytesIO(rsp.content))
+        self.t_image = ImageTk.PhotoImage(image)
+        self.label = t.Label(self.root, image=self.t_image)
+        self.label.pack(padx = 20, pady = 20)
+        
+    def button_creation(self):
+        #Next Arrow
+        self.next_button = t.Button(self.root,  text = "Next", padx=100, pady=100, bg="black", fg="white", command=self.root.destroy)
+        self.next_button.pack(padx=100, pady = 100)
     
-    The mathematical formalism for this process is below. E(W) are the expected winnings, where M represents the number of Martingale rounds, p denotes the probability of losing, and n is the numbers of coups (spins necessary to achieve first Martingale win).
-    
-    E(N) is the expected value of coups."""
-            
-            text_box_two = t.Text(desc_root, height = 12, width = 100, font = ("Times New Roman", 18))
-            text_box_two.insert(t.END, second_text_box)
-            text_box_two.pack(padx = 20, pady = 20)
-            
-            #LaTeX Code
-            UI.latex_coder("$E(W) = M(1-(2p)^n)$", desc_root)
-            UI.latex_coder("$E(N) = M*E(m)$", desc_root)
-            UI.latex_coder("$E(m) = \\frac{1}{1-p}$", desc_root)
-            
-            desc_root.mainloop()
+    def end(self):
+        self.root.destroy()
+        
+    def run(self):
+        self.window_creation()
+        self.text_creation()
+        self.image_creation()
+        self.button_creation()
+        self.root.mainloop()
+        
+class explanation_window(main_window):
+    def __init__(self, subtitle, textbox, second_textbox):
+        super().__init__(subtitle, textbox)
+        
+        self.second_textbox = second_textbox
+        
+        #Widget for Later
+        self.w_second_textbox = None
+        
+    def image_creation(self):
+        return
+    def latex_coder(self, expression: str, root):
+        LTX_code = expression
+        LTX_fig = plt.Figure(figsize=(4,1.5))
+        LTX_ax = LTX_fig.add_subplot(111)
+        LTX_ax.text(0.5,0.5, LTX_code, fontsize=18, ha="center", va="center")
+        LTX_ax.axis("off")
+        LTX_canvas = FigureCanvasTkAgg(LTX_fig, master = root)
+        LTX_canvas.get_tk_widget().pack()
+        LTX_canvas.draw()
+        
+    def button_creation(self):
+        #Next Arrow
+        self.next_button = t.Button(self.root,  text = "Next", padx=5, pady=5, bg="black", fg="white", command=self.root.destroy)
+        self.next_button.pack(padx=5, pady = 5)
+        
+    def second_text_box(self):
+        self.w_second_textbox = t.Text(self.root, height = 5, width = 69, font = ("Times New Roman", 18))
+        self.w_second_textbox.insert(t.END, self.second_textbox)
+        self.w_second_textbox.pack(padx = 20, pady = 20)
+        
+    def run(self):
+        self.window_creation()
+        self.text_creation()
+        self.image_creation()
+        self.latex_coder("$E(W) = M(1-(2p)^n)$", self.root)
+        self.latex_coder("$E(N) = M*E(m)$", self.root)
+        self.latex_coder("$E(m) = \\frac{1}{1-p}$", self.root)
+        self.second_text_box()
+        self.button_creation()
+        self.root.mainloop()
+        
+first = main_window("Martingale Game", "Hey there! This is a game designed to showcase the martingale strategy for playing the classic casino game of roulette. There are a few options to view how the strategy works. Click the next button to proceed!")
+first.run()
+
+second = explanation_window("How does the Martingale System work?", "The Martingale Strategy is simple. Bet some amount on a game of roulette, either on red of black. If you win, continue betting on the same color. If you lose, double the bet size and bet again on the same color. The degree of consistency exists due to the roughly binomial distribution this follows. Of course, American roulette involves a green color that shifts the odds of winning to roughly 47% when betting solely red or black. Although there will be losses, or even streaks of losing, the doubling of the bet recoups losses and adds profits. To combat this strategy, casinos employ a max bet size. In a sense, this strategy allows players to guarentee a win. However, players must have a substantial amount of funds and play reasonably far from the max bet size.", "The mathematical formalism can be found above. E(W) are the expected winnings, where M represents the number of Martingale rounds, p denotes the probability of losing, and n is the numbers of coups (spins necessary to achieve first Martingale win). E(N) is the expected value of coups.")
+second.run()
