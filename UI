@@ -5,6 +5,8 @@ from io import BytesIO
 from IPython.display import display, Math
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
+from Martingale_Game_Functions import player_mart_game
+
 
 
 
@@ -109,9 +111,30 @@ class explanation_window(main_window):
         self.second_text_box()
         self.button_creation()
         self.root.mainloop()
+
+class first_action_window(main_window):
+    def __init(self, subtitle, textbox):
+        super().__init__(subtitle, textbox)
+    def image_creation(self):
+        return
+    def entry_box_creation(self):
+        self.entry_box_one = t.Entry(self.root, height = 2, width = 30)
+    def run(self):
+        self.window_creation()
+        self.text_creation()
+        self.image_creation()
+        self.second_text_box()
+        self.entry_box_creation()
+        self.button_creation()
+        self.root.mainloop()
+    
+        
         
 first = main_window("Martingale Game", "Hey there! This is a game designed to showcase the martingale strategy for playing the classic casino game of roulette. There are a few options to view how the strategy works. Click the next button to proceed!")
 first.run()
 
 second = explanation_window("How does the Martingale System work?", "The Martingale Strategy is simple. Bet some amount on a game of roulette, either on red of black. If you win, continue betting on the same color. If you lose, double the bet size and bet again on the same color. The degree of consistency exists due to the roughly binomial distribution this follows. Of course, American roulette involves a green color that shifts the odds of winning to roughly 47% when betting solely red or black. Although there will be losses, or even streaks of losing, the doubling of the bet recoups losses and adds profits. To combat this strategy, casinos employ a max bet size. In a sense, this strategy allows players to guarentee a win. However, players must have a substantial amount of funds and play reasonably far from the max bet size.", "The mathematical formalism can be found above. E(W) are the expected winnings, where M represents the number of Martingale rounds, p denotes the probability of losing, and n is the numbers of coups (spins necessary to achieve first Martingale win). E(N) is the expected value of coups.")
 second.run()
+
+third = first_action_window("Yuh", "Yuh Yuh")
+third.run()
